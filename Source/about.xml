@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Feeding Tubes</name>
+  <author>Teh Flamin' Taco</author>
+  <supportedVersions>
+    <li>1.1</li>
+    <li>1.2</li>
+  </supportedVersions>
+  <description>Forcefeed patients from a bin.</description>
+  <packageId>ataco.feedingtubes</packageId>
+</ModMetaData>
