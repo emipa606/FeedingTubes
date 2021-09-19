@@ -1,4 +1,7 @@
 # Changelog for FeedingTubes
 
+1.0.1.0 - Added support for Dubs Bad Hygienes thirst
+
+
 1.0.0.0 - First publish
 

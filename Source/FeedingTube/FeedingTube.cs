@@ -261,6 +261,14 @@ namespace FeedingTube
                 {
                     foodStored.Remove(bestFood);
                 }
+
+                if (Main.ThirstDef == null)
+                {
+                    continue;
+                }
+
+                var thirstNeed = victim.needs.TryGetNeed(Main.ThirstDef);
+                thirstNeed.CurLevel = thirstNeed.MaxLevel;
             }
         }
     }
