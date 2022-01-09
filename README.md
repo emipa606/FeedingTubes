@@ -8,6 +8,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2265134237
 - Should no longer try to fill it with more food than needed
 - Only one pawn will try to fill it at a time
 - Should now work with any bed that defaults to medical bed
+- Added support to also refill thirst from https://steamcommunity.com/sharedfiles/filedetails/?id=836308268]Dubs Bad Hygiene when feeding
 
 ![Image](https://i.imgur.com/pufA0kM.png)
 

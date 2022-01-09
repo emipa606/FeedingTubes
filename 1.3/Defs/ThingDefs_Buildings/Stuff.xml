@@ -27,6 +27,10 @@
             <li>FoodRaw</li>
             <li>FoodMeals</li>
           </categories>
+          <thingDefs>
+            <li>Pemmican</li>
+            <li>Kibble</li>
+          </thingDefs>
           <specialFiltersToDisallow>
             <li>AllowPlantFood</li>
           </specialFiltersToDisallow>
@@ -39,6 +43,10 @@
             <li>FoodRaw</li>
             <li>FoodMeals</li>
           </categories>
+          <thingDefs>
+            <li>Pemmican</li>
+            <li>Kibble</li>
+          </thingDefs>
           <disallowedThingDefs>
             <li>Meat_Human</li>
             <li>Meat_Megaspider</li>
