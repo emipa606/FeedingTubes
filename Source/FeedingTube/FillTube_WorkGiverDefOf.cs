@@ -1,10 +1,9 @@
 ﻿using RimWorld;
 
-namespace FeedingTube
+namespace FeedingTube;
+
+[DefOf]
+internal class FillTube_WorkGiverDefOf
 {
-    [DefOf]
-    internal class FillTube_WorkGiverDefOf
-    {
-        public static WorkGiverDef FillTube;
-    }
+    public static WorkGiverDef FillTube;
 }

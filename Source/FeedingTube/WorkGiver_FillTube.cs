@@ -4,84 +4,83 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace FeedingTube
+namespace FeedingTube;
+
+internal class WorkGiver_FillTube : WorkGiver_Scanner
 {
-    internal class WorkGiver_FillTube : WorkGiver_Scanner
+    public override bool ShouldSkip(Pawn pawn, bool forced = false)
     {
-        public override bool ShouldSkip(Pawn pawn, bool forced = false)
+        return shouldSkipStatic(pawn);
+    }
+
+    public override Danger MaxPathDanger(Pawn pawn)
+    {
+        return Danger.Deadly;
+    }
+
+    public static bool shouldSkipStatic(Pawn pawn)
+    {
+        if (pawn.WorkTypeIsDisabled(WorkTypeDefOf.Hauling))
         {
-            return shouldSkipStatic(pawn);
+            return true;
         }
 
-        public override Danger MaxPathDanger(Pawn pawn)
+        if (pawn.WorkTagIsDisabled(WorkTags.ManualDumb))
         {
-            return Danger.Deadly;
+            return true;
         }
 
-        public static bool shouldSkipStatic(Pawn pawn)
+        if (pawn.WorkTagIsDisabled(WorkTags.Hauling))
         {
-            if (pawn.WorkTypeIsDisabled(WorkTypeDefOf.Hauling))
-            {
-                return true;
-            }
-
-            if (pawn.WorkTagIsDisabled(WorkTags.ManualDumb))
-            {
-                return true;
-            }
-
-            if (pawn.WorkTagIsDisabled(WorkTags.Hauling))
-            {
-                return true;
-            }
-
-            return pawn.Faction != Faction.OfPlayer && !pawn.RaceProps.Humanlike;
+            return true;
         }
 
-        public static Job generateFillJob(Pawn pawn, Thing t)
+        return pawn.Faction != Faction.OfPlayer && !pawn.RaceProps.Humanlike;
+    }
+
+    public static Job generateFillJob(Pawn pawn, Thing t)
+    {
+        if (shouldSkipStatic(pawn))
         {
-            if (shouldSkipStatic(pawn))
-            {
-                return null;
-            }
-
-            if (!(t is FeedingTube tube))
-            {
-                return null;
-            }
-
-            if (!pawn.CanReserve(tube))
-            {
-                return null;
-            }
-
-            bool Validator(Thing x)
-            {
-                return !x.IsForbidden(pawn) && pawn.CanReserve(x) && tube.Storeable(x) &&
-                       tube.foodCount() < FeedingTube.maxFoodStored;
-            }
-
-            var food = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map,
-                ThingRequest.ForGroup(ThingRequestGroup.FoodSourceNotPlantOrTree), PathEndMode.ClosestTouch,
-                TraverseParms.For(pawn), 9999f, Validator);
-            if (food is null)
-            {
-                return null;
-            }
-
-            var job = new Job(FillTube_JobDefOf.FillTube, t, food);
-            return job;
+            return null;
         }
 
-        public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
+        if (!(t is FeedingTube tube))
         {
-            return pawn.Map.listerThings.AllThings.Where(t =>
-                t is FeedingTube tube && tube.foodCount() < FeedingTube.maxFoodStored);
+            return null;
         }
 
-        public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
+        if (!pawn.CanReserve(tube))
         {
-            return generateFillJob(pawn, t);
+            return null;
         }
+
+        bool Validator(Thing x)
+        {
+            return !x.IsForbidden(pawn) && pawn.CanReserve(x) && tube.Storeable(x) &&
+                   tube.foodCount() < FeedingTube.maxFoodStored;
+        }
+
+        var food = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map,
+            ThingRequest.ForGroup(ThingRequestGroup.FoodSourceNotPlantOrTree), PathEndMode.ClosestTouch,
+            TraverseParms.For(pawn), 9999f, Validator);
+        if (food is null)
+        {
+            return null;
+        }
+
+        var job = new Job(FillTube_JobDefOf.FillTube, t, food);
+        return job;
+    }
+
+    public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
+    {
+        return pawn.Map.listerThings.AllThings.Where(t =>
+            t is FeedingTube tube && tube.foodCount() < FeedingTube.maxFoodStored);
+    }
+
+    public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
+    {
+        return generateFillJob(pawn, t);
     }
 }
