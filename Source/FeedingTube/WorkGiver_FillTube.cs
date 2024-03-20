@@ -45,7 +45,7 @@ internal class WorkGiver_FillTube : WorkGiver_Scanner
             return null;
         }
 
-        if (!(t is FeedingTube tube))
+        if (t is not FeedingTube tube)
         {
             return null;
         }
@@ -53,12 +53,6 @@ internal class WorkGiver_FillTube : WorkGiver_Scanner
         if (!pawn.CanReserve(tube))
         {
             return null;
-        }
-
-        bool Validator(Thing x)
-        {
-            return !x.IsForbidden(pawn) && pawn.CanReserve(x) && tube.Storeable(x) &&
-                   tube.foodCount() < FeedingTube.maxFoodStored;
         }
 
         var food = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map,
@@ -71,6 +65,12 @@ internal class WorkGiver_FillTube : WorkGiver_Scanner
 
         var job = new Job(FillTube_JobDefOf.FillTube, t, food);
         return job;
+
+        bool Validator(Thing x)
+        {
+            return !x.IsForbidden(pawn) && pawn.CanReserve(x) && tube.Storeable(x) &&
+                   tube.foodCount() < FeedingTube.maxFoodStored;
+        }
     }
 
     public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)

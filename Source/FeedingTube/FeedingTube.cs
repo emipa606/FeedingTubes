@@ -9,16 +9,21 @@ namespace FeedingTube;
 
 public class FeedingTube : Building, ISlotGroupParent
 {
-    public static int maxFoodStored = 75;
+    public static readonly int maxFoodStored = 75;
+    public readonly SlotGroup slotGroup;
     private List<IntVec3> cachedOccupiedCells;
-    public List<Thing> foodStored = new List<Thing>();
+    public List<Thing> foodStored = [];
     public StorageSettings settings;
-    public SlotGroup slotGroup;
 
     public FeedingTube()
     {
         slotGroup = new SlotGroup(this);
     }
+
+    public string GroupingLabel => def.building.groupingLabel;
+
+
+    public int GroupingOrder => def.building.groupingOrder;
 
     public void Notify_SettingsChanged()
     {
@@ -93,7 +98,7 @@ public class FeedingTube : Building, ISlotGroupParent
     {
         base.PostMake();
         settings = new StorageSettings(this);
-        foodStored = new List<Thing>();
+        foodStored = [];
         if (def.building.defaultStorageSettings != null)
         {
             settings.CopyFrom(def.building.defaultStorageSettings);
@@ -125,6 +130,11 @@ public class FeedingTube : Building, ISlotGroupParent
             yield return gizmo2;
         }
 
+        if (foodCount() == 0)
+        {
+            yield break;
+        }
+
         yield return new Command_Action
         {
             action = Empty,
@@ -139,7 +149,7 @@ public class FeedingTube : Building, ISlotGroupParent
     {
         if (foodStored == null)
         {
-            foodStored = new List<Thing>();
+            foodStored = [];
         }
 
         return foodStored.Sum(t => t.stackCount);
@@ -149,7 +159,7 @@ public class FeedingTube : Building, ISlotGroupParent
     {
         if (foodStored == null)
         {
-            foodStored = new List<Thing>();
+            foodStored = [];
         }
 
         Log.Message($"Received {food.stackCount} food.");
@@ -173,7 +183,7 @@ public class FeedingTube : Building, ISlotGroupParent
     {
         if (foodStored == null)
         {
-            foodStored = new List<Thing>();
+            foodStored = [];
         }
 
         var builder = new StringBuilder();
