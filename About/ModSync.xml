@@ -2,7 +2,7 @@
 <ModSyncNinjaData>
   <ID>465707c1-dfb6-46bc-b896-65add6ed67c8</ID>
   <ModName>Feeding Tubes (Continued)</ModName>
-  <Version>1.5.0</Version>
+  <Version>1.6.0</Version>
   <SaveBreaking>False</SaveBreaking>
   <Host name="Github">
     <Owner>emipa606</Owner>
@@ -12,3 +12,4 @@
     <Branch>master</Branch>
   </Host>
 </ModSyncNinjaData>
+

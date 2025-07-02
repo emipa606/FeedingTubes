@@ -10,10 +10,10 @@ namespace FeedingTube;
 public class FeedingTube : Building, ISlotGroupParent
 {
     public static readonly int maxFoodStored = 75;
-    public readonly SlotGroup slotGroup;
+    private readonly SlotGroup slotGroup;
     private List<IntVec3> cachedOccupiedCells;
-    public List<Thing> foodStored = [];
-    public StorageSettings settings;
+    private List<Thing> foodStored = [];
+    private StorageSettings settings;
 
     public FeedingTube()
     {
@@ -61,10 +61,7 @@ public class FeedingTube : Building, ISlotGroupParent
 
     public List<IntVec3> AllSlotCellsList()
     {
-        if (cachedOccupiedCells == null)
-        {
-            cachedOccupiedCells = AllSlotCells().ToList();
-        }
+        cachedOccupiedCells ??= AllSlotCells().ToList();
 
         return cachedOccupiedCells;
     }
@@ -88,6 +85,8 @@ public class FeedingTube : Building, ISlotGroupParent
     {
         return false;
     }
+
+    public bool HaulDestinationEnabled => true;
 
     public bool Storeable(Thing t)
     {
@@ -137,7 +136,7 @@ public class FeedingTube : Building, ISlotGroupParent
 
         yield return new Command_Action
         {
-            action = Empty,
+            action = empty,
             hotKey = KeyBindingDefOf.Misc1,
             defaultDesc = "Empty the tube",
             icon = ContentFinder<Texture2D>.Get("UI/Designators/Open"),
@@ -147,20 +146,14 @@ public class FeedingTube : Building, ISlotGroupParent
 
     public int foodCount()
     {
-        if (foodStored == null)
-        {
-            foodStored = [];
-        }
+        foodStored ??= [];
 
         return foodStored.Sum(t => t.stackCount);
     }
 
     public void LoadFood(Thing food)
     {
-        if (foodStored == null)
-        {
-            foodStored = [];
-        }
+        foodStored ??= [];
 
         Log.Message($"Received {food.stackCount} food.");
         foreach (var stackable in foodStored.Where(t => t.CanStackWith(food)))
@@ -181,10 +174,7 @@ public class FeedingTube : Building, ISlotGroupParent
 
     public override string GetInspectString()
     {
-        if (foodStored == null)
-        {
-            foodStored = [];
-        }
+        foodStored ??= [];
 
         var builder = new StringBuilder();
         builder.Append(base.GetInspectString());
@@ -202,7 +192,7 @@ public class FeedingTube : Building, ISlotGroupParent
         return builder.ToString();
     }
 
-    public void Empty()
+    private void empty()
     {
         foreach (var food in foodStored)
         {
@@ -214,7 +204,7 @@ public class FeedingTube : Building, ISlotGroupParent
 
     public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
     {
-        Empty();
+        empty();
         base.Destroy(mode);
     }
 
@@ -229,7 +219,7 @@ public class FeedingTube : Building, ISlotGroupParent
         {
             yield return new FloatMenuOption("Fill (full)", null);
         }
-        else if (WorkGiver_FillTube.shouldSkipStatic(selPawn))
+        else if (WorkGiver_FillTube.ShouldSkipStatic(selPawn))
         {
             yield return new FloatMenuOption("Fill (unwilling)", null);
         }
@@ -237,7 +227,7 @@ public class FeedingTube : Building, ISlotGroupParent
         {
             yield return new FloatMenuOption("Fill", () =>
             {
-                var doFill = WorkGiver_FillTube.generateFillJob(selPawn, this);
+                var doFill = WorkGiver_FillTube.GenerateFillJob(selPawn, this);
                 if (doFill != null)
                 {
                     selPawn.jobs.TryTakeOrderedJob(doFill);
@@ -246,7 +236,7 @@ public class FeedingTube : Building, ISlotGroupParent
         }
     }
 
-    public override void Tick()
+    protected override void Tick()
     {
         base.Tick();
 

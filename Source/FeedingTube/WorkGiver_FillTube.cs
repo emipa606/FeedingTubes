@@ -10,7 +10,7 @@ internal class WorkGiver_FillTube : WorkGiver_Scanner
 {
     public override bool ShouldSkip(Pawn pawn, bool forced = false)
     {
-        return shouldSkipStatic(pawn);
+        return ShouldSkipStatic(pawn);
     }
 
     public override Danger MaxPathDanger(Pawn pawn)
@@ -18,7 +18,7 @@ internal class WorkGiver_FillTube : WorkGiver_Scanner
         return Danger.Deadly;
     }
 
-    public static bool shouldSkipStatic(Pawn pawn)
+    public static bool ShouldSkipStatic(Pawn pawn)
     {
         if (pawn.WorkTypeIsDisabled(WorkTypeDefOf.Hauling))
         {
@@ -38,9 +38,9 @@ internal class WorkGiver_FillTube : WorkGiver_Scanner
         return pawn.Faction != Faction.OfPlayer && !pawn.RaceProps.Humanlike;
     }
 
-    public static Job generateFillJob(Pawn pawn, Thing t)
+    public static Job GenerateFillJob(Pawn pawn, Thing t)
     {
-        if (shouldSkipStatic(pawn))
+        if (ShouldSkipStatic(pawn))
         {
             return null;
         }
@@ -81,6 +81,6 @@ internal class WorkGiver_FillTube : WorkGiver_Scanner
 
     public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
     {
-        return generateFillJob(pawn, t);
+        return GenerateFillJob(pawn, t);
     }
 }

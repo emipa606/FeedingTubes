@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: fill a feeding tube with food -->
+  <FillTube.label>fill a feeding tube with food</FillTube.label>
+  <!-- EN: filling -->
+  <FillTube.gerund>filling</FillTube.gerund>
+  <!-- EN: fill -->
+  <FillTube.verb>fill</FillTube.verb>
+</LanguageData>
